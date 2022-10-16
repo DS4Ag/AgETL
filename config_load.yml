@@ -1,0 +1,38 @@
+DATABASE_CREDENTIALS:
+  Host: ec2-18-209-78-11.compute-1.amazonaws.com
+  Dbname: d2sji7ml6hl1g5
+  user: rvdfbvaqrgiwgm
+  port: 5432
+  password: c9c72f9192be5fb8400ef257210ec2c8376d8c496d912953b32b10a0d58e570d
+
+# https://www.postgresql.org/docs/current/datatype.html
+# https://www.postgresql.org/docs/current/sql-createtable.html
+NEW_TABLE_COLUMNS:
+  plot: int NOT NULL         
+  range: int     
+  line: varchar                
+  entry: int           
+  source: varchar        
+  rep: int         
+  environment: varchar 
+  id_sample: varchar PRIMARY KEY 
+  sample_name: varchar 
+  experiment_name: varchar 
+  sampling_identifier: varchar
+  variable_name: varchar
+  season: varchar
+  variable_value: real
+  date: date
+
+TABLE_NAME:
+  - Purdue_wanglab_acre_biomass  
+
+NEW_COLUMNS_IF_TABLE_EXISTS:
+  variable_units: varchar
+
+FILE_TO_UPLOAD:
+  Folder : ./input_database/
+  Input_template_file_name : LAI_ACRE_2022.csv
+
+PRYMARY_KEY_FILE:
+  - id_sample

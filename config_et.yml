@@ -1,0 +1,30 @@
+FILES_TO_PROCESS: 
+  Folder: ./files_to_process/
+
+ADDITIONAL_INFORMATION_FILES: 
+  Folder: ./additional_information_files/ 
+
+JOIN_FILES_COMMON_COLUMNS: 
+  - Plot
+  - Environment
+
+COLUMNS_TO_DROP:
+  - LAI_FILE
+  - TIME
+
+UPDATE_COLUMN_VALUES:
+  Early: Early planting date
+  Late: Late planting date
+  ACRE-Biomass: ACRE Public Biomass
+  y22: 2022
+  LAI: Leaf Area Index
+
+NEW_COLUMNS:
+  Variable_units: LAI
+
+UPDATE_COLUMN_NAMES:
+  measurment: Variable_name
+  lai: Variable_value
+
+OUTPUT_FILE_NAME:
+  - 'LAI_ACRE_2022'
