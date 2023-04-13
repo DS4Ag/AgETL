@@ -1,0 +1,65 @@
+# You can use coments 
+# this is single line comment
+# A commented block is skipped during execution
+
+FILES_TO_PROCESS: 
+  Folder: ./et_files_to_process/
+
+ADDITIONAL_INFORMATION_FILES: 
+  Folder: ./et_additional_information_files/
+
+JOIN_FILES_COMMON_COLUMNS: 
+  - Plot
+  - Environment
+  - Rep
+
+COLUMNS_TO_DROP:
+  - PictureOfPlot
+  - NotesOfPlot
+  - PictureOfexperiment
+  - NotesOfexperiment
+  - Audio
+  - lai_file
+  - time 
+  - picture_Plot
+  - picture_Experiment
+  - notes_Plot
+  - Width
+  - Width (cm)
+
+UPDATE_COLUMN_NAMES: 
+  measurment: Variable_name
+  seeds per pod: variable_value
+  experiment: experiment_name
+  Date Of Measurement: date
+  lai: variable_value
+  height(cm): variable_value
+  heigth(cm): variable_value
+  height: variable_value
+  
+NEW_COLUMNS:
+  Variable_units: cm
+  #Variable_units: LAI
+  #Variable_units: Number of seeds/Pod
+  
+PRIMARY_KEY_COLUMN:
+  - id_sample
+  
+UPDATE_PRIMARY_KEY_VALUES:
+  width-height: height
+  sampl: sampling
+  
+# Make sure to replace extra /t characters 
+UPDATE_COLUMN_VALUES:
+  a: A
+  b: B
+  c: C
+  d: D
+  Early: Early planting date
+  Late: Late planting date
+  ACRE-Biomass: ACRE Public Biomass
+  y22: 2022
+  LAI: Leaf Area Index
+
+OUTPUT_FILE_NAME:
+  - 'height_ACRE_Biomass_summer-2022_clean'
