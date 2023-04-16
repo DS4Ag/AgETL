@@ -3,25 +3,16 @@
 # A commented block is skipped during execution
 
 DATABASE_CREDENTIALS:
-# railway github
-  #Host: containers-us-west-187.railway.app
-  #Dbname: railway
-  #user: postgres
-  #port: 7895
-  #password: 9CYbCSjLZrKyXbl5QgUE
-
-# railway lvargas@purdue.edu
-  Host: containers-us-west-137.railway.app
+  Host: containers-us-west-187.railway.app
   Dbname: railway
   user: postgres
-  port: 6107
-  password: TdAqKQ9DGYnHafbtYl8n
+  port: 7895
+  password: ****************QgUE
 
 TABLE_NAME:
   - Purdue_wanglab_acre_biomass
 
-# https://www.postgresql.org/docs/current/datatype.html
-# https://www.postgresql.org/docs/current/sql-createtable.html
+# SQL Language Data Types: https://www.postgresql.org/docs/current/datatype.html
 NEW_TABLE_COLUMNS:
   plot: int NOT NULL         
   range: int     

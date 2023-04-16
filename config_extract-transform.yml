@@ -50,7 +50,7 @@ UPDATE_PRIMARY_KEY_VALUES:
   sampl: sampling
   
 # Make sure to replace extra /t characters 
-UPDATE_COLUMN_VALUES:
+UPDATE_ROW_VALUES:
   a: A
   b: B
   c: C

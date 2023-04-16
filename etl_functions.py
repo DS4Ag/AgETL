@@ -153,7 +153,7 @@ def drop_not_used_columns(config_et_file_name, item_COLUMNS_TO_DROP, dataFrame):
     return dataFrame
 
 
-def update_column_values(config_et_file_name, item_UPDATE_COLUMN_VALUES, dataFrame):
+def update_column_values(config_et_file_name, item_UPDATE_ROW_VALUES, dataFrame):
     
     '''
     Update values column by column 
@@ -162,7 +162,7 @@ def update_column_values(config_et_file_name, item_UPDATE_COLUMN_VALUES, dataFra
     ### Update row values 
 
     # get dict values from config file
-    values_update =  functions.get_yml_item_value(config_et_file_name, item_UPDATE_COLUMN_VALUES)
+    values_update =  functions.get_yml_item_value(config_et_file_name, item_UPDATE_ROW_VALUES)
 
     if values_update != None:
 
