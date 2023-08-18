@@ -10,7 +10,7 @@ ADDITIONAL_INFORMATION_FILES:
     Folder: ./et_additional_information_files/
 
 OUTPUT_FILE_NAME:
-    - height_ACRE_Biomass_summer-2022_clean
+    - example_output_file
 
 JOIN_FILES_COMMON_COLUMNS: 
     - Plot
@@ -46,7 +46,6 @@ UPDATE_COLUMN_VALUES:
     Late: Late planting date
     ACRE-Biomass: ACRE Public Biomass
     y22: 2022
-    LAI: Leaf Area Index
 
 CREATE_PRIMARY_KEY_IF_NEEDED:
     # id_observation:
