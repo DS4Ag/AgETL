@@ -1,4 +1,4 @@
-id_sample,sample_name,plot,rep,experiment,environment,season,measurment,sampling_identifier,Height (cm),Width (cm),picture_Plot,picture_Experiment,Date Of Measurement,notes_Plot
+id_observation,observation_name,plot,rep,experiment,treatment,season,measurment,sampling_identifier,Height (cm),Width (cm),picture_Plot,picture_Experiment,Date Of Measurement,notes_Plot
 1_a_ACRE-Biomass_Early_y22_width-height_sampling-1,a,1,1,ACRE-Biomass,Early,y22,width-height,sampling-1,16.51,36.83,,/storage/emulated/0/plot_data/width-height_1_ACRE-Biomass_Early_y22/photos/1_a_ACRE-Biomass_Early_y22_width-height_sampling-1_picture_Experiment_1_2022-07-12-06-07-14.jpg,7/12/2022,
 1_b_ACRE-Biomass_Early_y22_width-height_sampling-1,b,1,1,ACRE-Biomass,Early,y22,width-height,sampling-1,24.13,38.1,,,7/12/2022,
 2_a_ACRE-Biomass_Early_y22_width-height_sampling-1,a,2,1,ACRE-Biomass,Early,y22,width-height,sampling-1,39.37,50.8,,,7/12/2022,

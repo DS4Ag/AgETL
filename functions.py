@@ -2,6 +2,8 @@ import pandas as pd
 import os
 import errno
 import yaml
+from string import ascii_uppercase
+import itertools
 
 def get_yml_item_value(file, item_input):
 # function that opens the yaml file and returns the value that the item has
@@ -187,25 +189,29 @@ def get_path_item(file, item_input):
 
             value_list = value
 
-
         else:
             
             # get the path and store it in a variable
 
             if any(s.startswith('./') and s.endswith('/') for s in values_list_items):
-
+                
+                # review if the path exists as directory
                 if os.path.isdir(value):
 
                     folder_path = value
+                    
+                    # return the path and the list of sequences
+    
+                    return folder_path
+                    
+                else:
+                    
+                    print('The directory ', value, ' does not exist' )
 
             else:
 
                 print('ERROR! = Path should be like: ./input/') 
                 
-    # return the path and the list of sequences
-    
-    return folder_path
-
 
 def concatenate_csv_files(file, item_input):
 # function that reads and concatenates a list of files that exist in a directory
@@ -251,7 +257,7 @@ def check_if_list_columns_exist_in_dataframe(list_columns, data_frame_name):
 
 
 def create_table_sql_statement(cursor, conn, sql_statement):
-### function that executes the sql_staement
+# function that executes the sql_staement
 
     for statement in sql_statement:
         
@@ -266,3 +272,48 @@ def create_table_sql_statement(cursor, conn, sql_statement):
             print(e)
             
         conn.commit()
+        
+        
+def matching_elements_two_lists(first_list, second_list):
+# Function that compares two lists and returns the elements that exist in both of them
+
+    # compare the template colums vs subset columns from config file and return NOT matches
+    not_matching_elements = list(set(first_list).difference(second_list))
+
+    if len(not_matching_elements) > 0:
+
+        print('ATTENTION! The following columns do not exist in the data frame:', not_matching_elements)
+
+    # Remove 'columns' form the list that does no exist in the template
+    return [element for element in first_list if element not in not_matching_elements]
+
+        
+def iter_all_strings():    
+# Creates a continuos alphabetic list
+
+    for size in itertools.count(1):
+        
+        for s in itertools.product(ascii_uppercase, repeat=size):
+            
+            yield "".join(s)
+
+
+def list_characters(number):
+# Stores the list of aphabetic characteres base on the number of rows to be assigned
+
+    count = 1
+    
+    alpha_list = []
+
+    for s in iter_all_strings():
+
+
+        alpha_list.append(s)
+
+        if count == number:
+
+            break
+
+        count += 1
+        
+    return alpha_list

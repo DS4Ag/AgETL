@@ -3,39 +3,38 @@
 # A commented block is skipped during execution
 
 DATABASE_CREDENTIALS:
-  Host: containers-us-west-187.railway.app
-  Dbname: railway
-  user: postgres
-  port: 7895
-  password: ****************QgUE
+    Host: containers-us-west-195.railway.app
+    Dbname: railway
+    user: postgres
+    port: 5836
+    password: ****************QgUE
 
 TABLE_NAME:
-  - Purdue_wanglab_acre_biomass
+    - table_example
 
 # SQL Language Data Types: https://www.postgresql.org/docs/current/datatype.html
 NEW_TABLE_COLUMNS:
-  plot: int NOT NULL         
-  range: int     
-  line: varchar                
-  entry: int           
-  source: varchar        
-  rep: int         
-  environment: varchar 
-  id_sample: varchar PRIMARY KEY 
-  sample_name: varchar 
-  experiment_name: varchar 
-  sampling_identifier: varchar
-  variable_name: varchar
-  season: varchar
-  variable_value: real
-  date: date
+    crop: varchar 
+    plot: int NOT NULL         
+    range: int                   
+    entry: int                  
+    rep: int         
+    treatment: varchar 
+    id_observation: varchar PRIMARY KEY 
+    observation_name: varchar 
+    experiment_name: varchar 
+    sampling_identifier: varchar
+    variable_name: varchar
+    season: varchar
+    variable_value: real
+    date: date
+    
+PRIMARY_KEY_COLUMN:
+    - id_observation
 
 NEW_COLUMNS_IF_TABLE_EXISTS:
-  variable_units: varchar
+    variable_units: varchar
 
 FILE_TO_UPLOAD:
-  Folder : ./load_input_database/
-  Input_template_file_name : 20230223-104708_ACRE_Biomass_summer-2022_clean_date.csv
-
-PRIMARY_KEY_COLUMN:
-  - id_sample
+    folder : ./et_output/
+    input_data_file_name : data_file_to_upload.csv

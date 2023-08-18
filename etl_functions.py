@@ -34,21 +34,30 @@ def compare_column_names(file, item_input):
             # read the first file
             if number == 0:
                 dataFrame = pd.read_csv(path)
+                
+                # remove unnamed columns 
+                dataFrame = dataFrame.dropna(how='all', axis='columns')
 
             # read the second file and compare columns with the columns of first dataframe
             if number == 1:
 
                 newDataFrame = pd.read_csv(path)
+                
+                # remove unnamed columns 
+                newDataFrame = newDataFrame.dropna(how='all', axis='columns')
 
                 # create a list with the columns names that are different
-                lst_difference = newDataFrame.columns.difference(dataFrame.columns).values.tolist()
+                lst_difference = newDataFrame.columns.str.lower().difference(dataFrame.columns.str.lower()).values.tolist()
 
             else:
 
                 newDataFrame = pd.read_csv(path)
+                
+                # remove unnamed columns 
+                newDataFrame = newDataFrame.dropna(how='all', axis='columns')
 
                 # compare column names that are different
-                difference = newDataFrame.columns.difference(dataFrame.columns).values.tolist()
+                difference = newDataFrame.columns.str.lower().difference(dataFrame.columns.str.lower()).values.tolist()
 
                 # add the column name to the ist if they does not exist
                 for element in difference:
@@ -70,16 +79,21 @@ def extract_and_join_files(config_et_file_name, item_FILES_TO_PROCESS, item_UPDA
 
     # get and concatenate all the files that are going to be proccessed. Function concatenate_csv_files() is used
     data_frame_to_process = functions.concatenate_csv_files_updating_column_names(config_et_file_name, item_FILES_TO_PROCESS, item_UPDATE_COLUMN_NAMES)
+    
+    # remove unnamed columns 
+    data_frame_to_process = data_frame_to_process.dropna(how='all', axis='columns')
 
     ### If there is additional information to add, join to the dataframe. If not only change the name of the data frame
     # ADDITIONAL_INFORMATION_FILES
     # JOIN_FILES_COMMON_COLUMNS
-
     additional_information_files = functions.get_yml_item_value(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
 
     # get and concatenate all the Experiment info files that are going to be proccessed. Function concatenate_csv_files() is used
     experiment_info_files = functions.concatenate_csv_files(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
-
+    
+    # remove unnamed columns 
+    experiment_info_files = experiment_info_files.dropna(how='all', axis='columns')
+    
     # if directory path was specified in the configution file and the folder contains the additional files, they are going to be 
     # joined to the data files
     if additional_information_files != None and experiment_info_files is not None:
@@ -153,7 +167,7 @@ def drop_not_used_columns(config_et_file_name, item_COLUMNS_TO_DROP, dataFrame):
     return dataFrame
 
 
-def update_column_values(config_et_file_name, item_UPDATE_ROW_VALUES, dataFrame):
+def update_column_values(config_et_file_name, item_UPDATE_COLUMN_VALUES, dataFrame):
     
     '''
     Update values column by column 
@@ -162,7 +176,7 @@ def update_column_values(config_et_file_name, item_UPDATE_ROW_VALUES, dataFrame)
     ### Update row values 
 
     # get dict values from config file
-    values_update =  functions.get_yml_item_value(config_et_file_name, item_UPDATE_ROW_VALUES)
+    values_update =  functions.get_yml_item_value(config_et_file_name, item_UPDATE_COLUMN_VALUES)
 
     if values_update != None:
 
@@ -206,6 +220,74 @@ def add_new_columns(config_et_file_name, item_NEW_COLUMNS, dataFrame):
     print(dataFrame.info())
             
     return dataFrame
+
+
+def create_primary_key_if_needed(config_et_file_name, item_CREATE_PRIMARY_KEY_IF_NEEDED, item_PRIMARY_KEY_COLUMN,  dataFrame):
+    
+    '''
+    Creates a primary key value for files that does not have it
+    '''
+    
+    # review if item_CREATE_PRIMARY_KEY_IF_NEEDED has keys and values
+    block_keys = functions.get_yml_item_value(config_et_file_name, item_CREATE_PRIMARY_KEY_IF_NEEDED)
+                  
+    if block_keys != None:
+
+        # get the name of the new column to create from the config file
+        name_column_id = [value for value in functions.get_yml_item_value(config_et_file_name, item_CREATE_PRIMARY_KEY_IF_NEEDED).keys()][0].lower()
+
+        # get the column names from the config file and make them lower case to create the id sample
+        list_columns_id = [x.lower() for x in
+                               [value for value in functions.get_yml_item_value(config_et_file_name, item_CREATE_PRIMARY_KEY_IF_NEEDED).values()][0]]
+
+        # get a list of columns that exists in bot the list of config file and the dataframe
+        columns_in_dataFrame = functions.matching_elements_two_lists(list_columns_id, dataFrame.columns.tolist())
+
+        # create a temporary column to identify each sampling based on the specified columns
+        dataFrame['temp_unique'] = dataFrame[columns_in_dataFrame].apply(lambda x: '-'.join(str(value) for value in x), axis = 1)
+
+        # empty list to store observation names
+        list_observ_names = []
+
+        # for each unique value create a list of characters and stere on the list 
+        for unique in dataFrame['temp_unique'].unique():
+
+            list_observ_names.extend(functions.list_characters(len(dataFrame[dataFrame['temp_unique'] == unique])))
+
+        # create a new column using the list of characters
+        dataFrame['observation_name'] = list_observ_names
+
+        # delete the temporal column
+        del dataFrame['temp_unique']
+
+        # add observation_name to list of list_columns_id
+        list_columns_id.insert(1, 'observation_name')
+
+        # get primary key column name
+        primary_key = functions.get_yml_item_value(config_et_file_name, item_PRIMARY_KEY_COLUMN)[0].lower()
+
+        # create id_observation column 
+        dataFrame[primary_key] = dataFrame[list_columns_id].apply(lambda x: '-'.join(str(value) for value in x), axis = 1)
+
+        # CUNTINUE HERE, VALIDATE THAT ID_OBSERVATION HAS A UNIQUE VALUE 
+        if dataFrame[primary_key].is_unique:
+            
+            print(dataFrame.info())
+
+            return dataFrame
+
+        else: 
+            
+            print('Columns anotated in the CREATE_PRIMARY_KEY_IF_NEEDED block do not create a unique identifier column!')
+            
+            print('The following rows are repeated!')
+            
+            print(dataFrame[dataFrame.duplicated([primary_key])==True])
+            
+    else:
+        
+        return dataFrame
+    
 
 
 def update_column_names(config_et_file_name, item_UPDATE_COLUMN_NAMES, dataFrame):
@@ -557,3 +639,4 @@ def insert_dataframe_to_database(connection, cursor, config_load_file_name, item
         return print("Error: %s" % error)
     
     print("Data has been inserted successfully!")
+    
