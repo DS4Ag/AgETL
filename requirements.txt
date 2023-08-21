@@ -1,0 +1,3 @@
+pandas==1.4.1
+psycopg2_binary==2.9.4
+PyYAML==6.0.1
