@@ -8,6 +8,7 @@
 [![YAML 1.2](https://img.shields.io/badge/YAML-1.2-success)](https://yaml.org/)
 
 
+[![DOI](https://zenodo.org/badge/680897136.svg)](https://zenodo.org/badge/latestdoi/680897136)
 
 Note: to open links in new tab use CTRL+click (Windows and Linux) or CMD+click (MacOS). 
 
