@@ -45,19 +45,26 @@ Loads the data into a single table in a data warehouse
 
 ## Prerequisites
 
-Install the requiered libraries using the [pip package installer](https://pypi.org/project/pip/) for Python.
+- Option 1
+    - Using Requirements File 
 
-- [PyYAML](https://pypi.org/project/PyYAML/)
+ ```sh
+    pip install -r requirements.txt
+``` 
+- option 2
+     - Install the requiered libraries using the [pip package installer](https://pypi.org/project/pip/) for Python.
+
+    [PyYAML](https://pypi.org/project/PyYAML/)
     ```sh
         pip install pyyaml
     
     ```
-- [Pandas](https://pypi.org/project/pandas/)
+    [Pandas](https://pypi.org/project/pandas/)
     ```sh
         pip install pandas
     
     ```    
-- [psycopg2](https://pypi.org/project/pandas/)
+    [psycopg2](https://pypi.org/project/pandas/)
     ```sh
         pip install psycopg2 
     
@@ -80,6 +87,16 @@ Install the requiered libraries using the [pip package installer](https://pypi.o
 
     1. [Download](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) **AgETL** from the **Github** repository: [https://github.com/Purdue-LuisVargas/agETL](https://github.com/Purdue-LuisVargas/agETL).
     2. Unzip the entire folder, then copy (if running Jupyter locally) or upload the downloaded files (if using the Jupyter Hub environment) in your Jupyter Notebook directory.
+
+## Cite as
+
+- Cite paper
+
+Vargas-Rojas, L., Ting, T.-C., Rainey, K., Reynolds, M., & Wang, D. (2023). AgTC and AgETL: Open-source tools to enhance data collection and management for agricultural and plant science research. _Technical Advances in Plant Science (under Review)_.
+
+- Cite software:
+
+Luis Vargas Rojas. (2023). DS4Ag/AgETL: AgETL v1.0 (v1.0). Zenodo. https://doi.org/10.5281/zenodo.8267617
     
 ## Contact
 
@@ -90,3 +107,6 @@ Luis Vargas Rojas - [lvargasr@purdue.edu](lvargasr@purdue.edu)
 
 
 Purdue University, Wang Lab [dianewanglab.com](https://www.dianewanglab.com/)
+
+
+
