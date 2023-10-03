@@ -34,7 +34,7 @@ Loads the data into a single table in a data warehouse
 
     Configuration file: config_load.yml
     
-If you are working on plant phenotyping experiments, we encourage you to follow the MIAPPE standards [https://www.miappe.org/](https://www.miappe.org/) for creating your database tables.
+If you are working on plant phenotyping experiments, we encourage you to follow the MIAPPE standards [(https://www.miappe.org/)](https://www.miappe.org/) for creating your database tables.
 ## How to run AgETL?
 
 - Option 1
