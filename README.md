@@ -87,7 +87,60 @@ Loads the data into a single table in a data warehouse
 
     1. [Download](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) **AgETL** from the **Github** repository: [https://github.com/Purdue-LuisVargas/agETL](https://github.com/Purdue-LuisVargas/agETL).
     2. Unzip the entire folder, then copy (if running Jupyter locally) or upload the downloaded files (if using the Jupyter Hub environment) in your Jupyter Notebook directory.
+    
+## Which files should I run?
 
+
+To run the functions in AgETL you should open them in Jupyter Notebook, **first** modify the configuration file (.yml), and **second** run the Python functions (.ipynb). 
+The process is divided into two tasks as it is indicated bellow: 
+
+_Raw data files (input)_ --> **Extraction and transformation** --> _standardized dataframe (output)_ --> **Load**
+
+- **Extraction and Transformation**: 
+The first set of functions runs the Extract and Transform processes. It outputs a CSV file where the data from different source files have been aggregated and standardized into a single format. 
+
+        You need the following files:
+
+            extract-transform.ipynb
+
+            config_extract-transform.yml
+
+
+- **Loading**: The second group of functions is used to load data into a single table in the database.
+
+        You need the following files:
+
+            load.ipynb
+
+            config_load.yml
+            
+            
+    To make the database connection you need to update the following information in the configuration file      (config_load.yml), as the following examples:  
+
+    - Localhost database:
+    ```sh
+        DATABASE_CREDENTIALS:
+            Host: localhost
+            Dbname: wanglab
+            user: postgres
+            port: 5432
+            password: **************WAdxm1
+    
+    ```
+
+
+    - Cloud server database:
+    ```sh
+        DATABASE_CREDENTIALS:
+            Host: containers-us-west-187.railway.app
+            Dbname: railway
+            user: postgres
+            port: 7895
+            password: **************WAdxm1
+    
+    ```        
+
+    
 ## Cite as
 
 - Cite paper
