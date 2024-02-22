@@ -3,6 +3,7 @@ import os
 import time
 import psycopg2
 import psycopg2.extras as extras
+import chardet
 
 # import functions file
 import sys
@@ -22,6 +23,12 @@ def compare_column_names(file, item_input):
     dir_path = functions.get_path_item(file, item_input)
 
     number = 0
+    
+    # Get a list of files in the directory
+    files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
+    print('Files to process: ')
+    print(files)
+    print('\n')
 
     # read each file
     for file in os.listdir(dir_path):
@@ -31,9 +38,19 @@ def compare_column_names(file, item_input):
 
             path = dir_path + file
 
+            # detect encoding
+
+            with open(path, 'rb') as f:
+                
+                result = chardet.detect(f.read())
+            
+            encoding = result['encoding']
+
+            # / detect encoding
+
             # read the first file
             if number == 0:
-                dataFrame = pd.read_csv(path)
+                dataFrame = pd.read_csv(path, encoding=encoding)
                 
                 # remove unnamed columns 
                 dataFrame = dataFrame.dropna(how='all', axis='columns')
@@ -41,7 +58,7 @@ def compare_column_names(file, item_input):
             # read the second file and compare columns with the columns of first dataframe
             if number == 1:
 
-                newDataFrame = pd.read_csv(path)
+                newDataFrame = pd.read_csv(path, encoding=encoding)
                 
                 # remove unnamed columns 
                 newDataFrame = newDataFrame.dropna(how='all', axis='columns')
@@ -51,7 +68,7 @@ def compare_column_names(file, item_input):
 
             else:
 
-                newDataFrame = pd.read_csv(path)
+                newDataFrame = pd.read_csv(path, encoding=encoding)
                 
                 # remove unnamed columns 
                 newDataFrame = newDataFrame.dropna(how='all', axis='columns')
@@ -86,20 +103,24 @@ def extract_and_join_files(config_et_file_name, item_FILES_TO_PROCESS, item_UPDA
     ### If there is additional information to add, join to the dataframe. If not only change the name of the data frame
     # ADDITIONAL_INFORMATION_FILES
     # JOIN_FILES_COMMON_COLUMNS
-    additional_information_files = functions.get_yml_item_value(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
+    additional_information_files_path = functions.get_yml_item_value(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
 
-    # get and concatenate all the Experiment info files that are going to be proccessed. Function concatenate_csv_files() is used
-    experiment_info_files = functions.concatenate_csv_files(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
+    #print(f'additional_information_files_path: {additional_information_files_path}')
+
+    if additional_information_files_path != None:
+        
+        # get and concatenate all the additional info files that are going to be proccessed. Function concatenate_csv_files() is used
+        additional_information_files = functions.concatenate_csv_files(config_et_file_name, item_ADDITIONAL_INFORMATION_FILES)
     
-    # remove unnamed columns 
-    experiment_info_files = experiment_info_files.dropna(how='all', axis='columns')
+        # remove unnamed columns 
+        additional_information_files = additional_information_files.dropna(how='all', axis='columns')
     
     # if directory path was specified in the configution file and the folder contains the additional files, they are going to be 
     # joined to the data files
-    if additional_information_files != None and experiment_info_files is not None:
+    if additional_information_files_path != None and additional_information_files is not None:
 
         # create a list whit the name of the dataFames
-        dataFrame_list = [experiment_info_files, data_frame_to_process]
+        dataFrame_list = [additional_information_files, data_frame_to_process]
 
         # get the list of columns that are going to be used to join the dataframes
         columns_join = functions.get_yml_item_value(config_et_file_name, item_JOIN_FILES_COMMON_COLUMNS)
@@ -107,17 +128,20 @@ def extract_and_join_files(config_et_file_name, item_FILES_TO_PROCESS, item_UPDA
 
         for dataFrame in dataFrame_list:
 
-            # check if the columns to be used to join the dataframes that are writen in the config file exist in 
-            # dataframe
+            # check if the columns to be used to join the dataframes that are writen in the config file exist in dataframe
             set_of_columns = functions.check_if_list_columns_exist_in_dataframe(columns_join_lower, dataFrame)
 
             if isinstance(set_of_columns, set):
 
-                print(f"Columns: {', '.join(set(columns_join_lower).difference(dataFrame.columns))} does not exist in the dataframe! Please fix it!")
+                print(f"The following columns do not exist in the data frame: {', '.join(set(columns_join_lower).difference(dataFrame.columns))}\nPlease fix it!")
+
+                print('\nColumns in data files:',list(data_frame_to_process.columns))
+
+                print('\nColumns in iditional information file:',list(additional_information_files.columns))
 
                 break 
 
-        joined_dataFrame = pd.merge(data_frame_to_process, experiment_info_files, on = columns_join_lower, how = 'left') 
+        joined_dataFrame = pd.merge(data_frame_to_process, additional_information_files, on = columns_join_lower, how = 'left') 
 
     else:
 
@@ -134,7 +158,7 @@ def drop_not_used_columns(config_et_file_name, item_COLUMNS_TO_DROP, dataFrame):
     Drop unused columns
     COLUMNS_TO_DROP
     '''
-    print('Columns dataframe: ', dataFrame.columns)
+    print('Dataframe columns:', dataFrame.columns)
 
     # get the list of columns that are going to be used to join the dataframes
     columns_to_drop = functions.get_yml_item_value(config_et_file_name, item_COLUMNS_TO_DROP)
@@ -144,7 +168,7 @@ def drop_not_used_columns(config_et_file_name, item_COLUMNS_TO_DROP, dataFrame):
     if not isinstance(columns_to_drop, type(None)):
 
         columns_to_drop_lower = [s.lower().replace(' ', '') for s in columns_to_drop]
-        print('Columns to drop', columns_to_drop_lower)
+        print('\n', 'Columns to drop:', columns_to_drop_lower)
         # drop columns from the dataframe
         # for each column in dataframe
 
@@ -154,13 +178,13 @@ def drop_not_used_columns(config_et_file_name, item_COLUMNS_TO_DROP, dataFrame):
             # delete if column of dataframe exists in list of columns
             if column_list in dataFrame.columns:
 
-                print('Column to drop: ', column_list)
-
                 #del dataFrame[col_df]
                 dataFrame = dataFrame.drop(columns=column_list)
 
         # drop columns from the dataframe 
         #dataFrame = dataFrame.drop(columns = columns_to_drop_lower)
+
+    print('\nNew dataframe info:')
 
     print(dataFrame.info())
 
@@ -303,19 +327,17 @@ def update_column_names(config_et_file_name, item_UPDATE_COLUMN_NAMES, dataFrame
 
         for key, value in update_column_names.items():
 
-            dataFrame.rename({key.lower() : value.lower()}, axis=1, inplace=True)
+            dataFrame.rename({key.lower().replace(' ', '') : value.lower()}, axis=1, inplace=True)
 
     # in case there are columns sharing the same name, merge them 
     
-    #define function to merge columns with same names together
-    def same_merge(x): return ','.join(x[x.notnull()].astype(str))
     
-    #define new DataFrame that merges columns with same names together
-    dataFrame = dataFrame.groupby(level=0, axis=1).apply(lambda x: x.apply(same_merge, axis=1))
+    # create a new DataFrame that merges columns with same names together
+    merged_dataFrame = dataFrame.T.groupby(level=0).first().T
 
-    print(dataFrame.info())
+    print(merged_dataFrame.info())
             
-    return dataFrame
+    return merged_dataFrame
 
 
 def update_primary_key_values(config_et_file_name, item_UPDATE_PRIMARY_KEY_VALUES, item_PRIMARY_KEY_COLUMN, dataFrame):
@@ -326,11 +348,11 @@ def update_primary_key_values(config_et_file_name, item_UPDATE_PRIMARY_KEY_VALUE
     '''
     # primary key values 
     primary_key_values = functions.get_yml_item_value(config_et_file_name, item_UPDATE_PRIMARY_KEY_VALUES)
-    
-    # get primary key
-    primary_key = functions.get_yml_item_value(config_et_file_name, item_PRIMARY_KEY_COLUMN)[0].lower()
 
     if primary_key_values != None:
+
+        # get primary key
+        primary_key = functions.get_yml_item_value(config_et_file_name, item_PRIMARY_KEY_COLUMN)[0].lower()
 
         for key, value in primary_key_values.items():
             

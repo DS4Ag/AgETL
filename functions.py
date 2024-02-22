@@ -4,6 +4,7 @@ import errno
 import yaml
 from string import ascii_uppercase
 import itertools
+import chardet
 
 def get_yml_item_value(file, item_input):
 # function that opens the yaml file and returns the value that the item has
@@ -12,7 +13,13 @@ def get_yml_item_value(file, item_input):
     file = file.lower()
     item_input = item_input.upper()
 
-    with open(file, 'r') as file:
+    # Use chardet to detect encoding
+    with open(file, 'rb') as raw_file:
+        result = chardet.detect(raw_file.read())
+
+    encoding = result['encoding']
+
+    with open(file, 'r', encoding = encoding) as file:
 
         configuration = yaml.full_load(file)
 
@@ -99,6 +106,8 @@ def concatenate_csv_files_updating_column_names(file, item_input, item_UPDATE_CO
     # get the column names items to change using the get_yml_item_value() function
     update_column_names = get_yml_item_value(file, item_UPDATE_COLUMN_NAMES)
 
+    #print(f'Columns to update: {update_column_names}')
+
     # get the path of the files to changge column names and join the data frames
     dir_path = get_path_item(file, item_input)
 
@@ -112,10 +121,20 @@ def concatenate_csv_files_updating_column_names(file, item_input, item_UPDATE_CO
 
             path = dir_path + file
 
+            # detect encoding
+
+            with open(path, 'rb') as f:
+                
+                result = chardet.detect(f.read())
+            
+            encoding = result['encoding']
+
+            # / detect encoding
+
             # if it is the first dataframe
             if num == 0:
 
-                dataFrame = pd.read_csv(path)
+                dataFrame = pd.read_csv(path, encoding=encoding, index_col=False)
 
                 # if item UPDATE_COLUMN_NAMES have content
                 if update_column_names != None:
@@ -129,7 +148,7 @@ def concatenate_csv_files_updating_column_names(file, item_input, item_UPDATE_CO
 
             else:
 
-                temp_dataFrame = pd.read_csv(path)
+                temp_dataFrame = pd.read_csv(path, encoding=encoding, index_col=False)
 
                 # if item UPDATE_COLUMN_NAMES have content
                 if update_column_names != None:
@@ -138,11 +157,15 @@ def concatenate_csv_files_updating_column_names(file, item_input, item_UPDATE_CO
                         # make all column names lowcase
                         temp_dataFrame.columns = temp_dataFrame.columns.str.lower()
 
-                        # replace the column name if it is in the item UPDATE_COLUMN_NAMES
+                         # replace the column name if it is in the item UPDATE_COLUMN_NAMES
                         temp_dataFrame.rename({key.lower(): value.lower()}, axis=1, inplace=True)
 
-                dataFrame = pd.concat([dataFrame, temp_dataFrame])
+                # Reset index of both dataFrame and temp_dataFrame
+                dataFrame.reset_index(drop=True, inplace=True)
+                temp_dataFrame.reset_index(drop=True, inplace=True)
 
+                dataFrame = pd.concat([dataFrame, temp_dataFrame])
+                      
             num = + 1
 
     # reset index

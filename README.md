@@ -143,14 +143,9 @@ The first set of functions runs the Extract and Transform processes. It outputs 
     
 ## Cite as
 
-- Cite paper
+Vargas-Rojas L, Ting T-C, Rainey KM, Reynolds M and Wang DR (2024) AgTC and AgETL: open-source tools to enhance data collection and management for plant science research. Front. Plant Sci. 15:1265073. doi: [10.3389/fpls.2024.1265073](https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2024.1265073/full).
 
-Vargas-Rojas, L., Ting, T.-C., Rainey, K., Reynolds, M., & Wang, D. (2023). AgTC and AgETL: Open-source tools to enhance data collection and management for agricultural and plant science research. _Technical Advances in Plant Science (under Review)_.
 
-- Cite software:
-
-Luis Vargas Rojas. (2023). DS4Ag/AgETL: AgETL v1.0 (v1.0). Zenodo. https://doi.org/10.5281/zenodo.8267617
-    
 ## Contact
 
 Diane Wang - [drwang@purdue.edu](drwang@purdue.edu)
