@@ -14,7 +14,7 @@ Note: to open links in new tab use CTRL+click (Windows and Linux) or CMD+click (
 
 ### What is AgETL?
 
-**Ag**ronomic **E**xtraction, **T**ransformation, and **L**oad  is a set of functions written in python that allow you to process data files from different agricultural and plant science experiments and aggregate them into a standard database table in a central repository to make data available for different variety of data analyses. 
+**Ag**ricultural Data **E**xtract, **T**ransform, and **L**oad Framework is a set of functions written in python that allow you to process data files from different agricultural and plant science experiments and aggregate them into a standard database table in a central repository to make data available for different variety of data analyses. 
 
 The execution of functions for this step is divided into two notebook files and configuration files. 
 
