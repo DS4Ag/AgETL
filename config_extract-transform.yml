@@ -2,42 +2,55 @@
 # this is single line comment
 # A commented block is skipped during execution
 
+######### FILES ONE VARIABLE ONE ROW #########
+
 FILES_TO_PROCESS: 
+## Path of the folder where the files to extract are located  
     Folder: ./et_files_to_process/
     # Folder: ./et_files_to_process/ACRE/        This is an example of how to use comments 
 
-ADDITIONAL_INFORMATION_FILES: 
+ADDITIONAL_INFORMATION_FILES:
+## Path to the folder that contains the files where additional information is going to be extracted 
     Folder: ./et_additional_information_files/
 
 OUTPUT_FILE_NAME:
+## Name of the final output file
     - example_output_file
 
-JOIN_FILES_COMMON_COLUMNS: 
+JOIN_FILES_COMMON_COLUMNS:
+## Comun colums to merge the files to process and the additional information files
     - Plot
     - Treatment
     - Rep
+    # - Add more sequences as neded...
 
 COLUMNS_TO_DROP:
+# - Add more sequences as neded...
     - pictureofplot
     - PictureOfexperiment
     - picture_Plot
     - picture_Experiment
     - notes_Plot
-    - Width (cm)
+    - measurment
+    # - Add more sequences as neded...
 
-UPDATE_COLUMN_NAMES: 
-    measurment: Variable_name
+UPDATE_COLUMN_NAMES:
+## Update dataframe column names 
+    # Old name: new name
     experiment: experiment_name
     Date Of Measurement: date
-    height(cm): Variable_value
-    heigth(cm): Variable_value
+    heigth (cm): Height (cm)
+    # Add more Keys: values as neded...
   
 NEW_COLUMNS:
-    Variable_units: cm
-    Crop : Wheat 
+## New columns to add to the data frame
+    # Column name: values to fill the rows
+    Crop : Wheat
+    # Add more Keys: values as neded...
 
 # Make sure to replace extra /t characters 
-UPDATE_COLUMN_VALUES:
+UPDATE_ROW_VALUES:
+## Update row values 
     a: A
     b: B
     c: C
@@ -45,20 +58,48 @@ UPDATE_COLUMN_VALUES:
     Early: Early planting date
     Late: Late planting date
     ACRE-Biomass: ACRE Public Biomass
-    y22: 2022
+    y22: Summer 2022
+
+    # Add more Keys: values as neded...
 
 CREATE_PRIMARY_KEY_IF_NEEDED:
-    # id_observation:
+## Creates a primary key column
+    # id_observation: # name of the new column
+        # List of the column names whose values will be used to create the primary key
         # - Plot
         # - Experiment
         # - Treatment
         # - Season
         # - Variable_name
         # - Date
+        # - Add more sequences as neded...
         
 PRIMARY_KEY_COLUMN:
+## Specify the name of the column that contains the id of the observation
   - id_observation
 
 UPDATE_PRIMARY_KEY_VALUES:
+## Values to replace parts of the string in the primary key 
     width-height: height
     sampl: sampling
+    # Add more Keys: values as neded...
+
+######### /FILES THAT HAVE ONE VARIABLE #########
+
+######### FILES THAT HAVE MORE THAN ONE VARIABLE #########
+
+TRANSPOSE_COLUMNS_TO_ONE_COLUMN:
+## Names of the columns will be transformed into single-column values, and a column of units
+    # Measurement_name (units)
+    - Width (cm)
+    - Height (cm)
+
+NAMES_NEW_UNIQUE_COLUMNS:
+## Labes for the column that will contain the value (first), units (second) and name (third) of the variable 
+    # You should not change the order of the 
+    - Variable_value 
+    - Variable units
+    - Variable name
+    # - Add more sequences as neded...
+
+######### / FILES THAT HAVE MORE THAN ONE VARIABLE #########

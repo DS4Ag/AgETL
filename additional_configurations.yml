@@ -1,0 +1,40 @@
+# YAML file defining groups of invalid values
+# used in the transpose_multiple_columns_to_a_single_column() function on etl_functions.py
+INVALID_VALUES:
+  # Group of common invalid values found in datasets
+  common:
+    - float(nan)
+    - nan
+    - None
+    - null
+    - ''
+    - ' ' 
+    - NA
+    - N/A
+    - NaN
+    - null
+    - error
+    - ERROR
+    - Invalid
+    - invalid
+    - MISSING
+    - Missing
+    - missing
+     # - Add more sequences as neded...
+  additional_numerical_placeholders:
+    - '-9999'
+    - '999999'
+    # - Add more sequences as neded...
+  additional_symbols:
+    - '#'
+    - '??'
+    - '???'
+    # - Add more sequences as neded...
+  additional_values:
+    - N/A
+    - Not available
+    - Unknown
+    - TBA
+    - To be determined
+    # - Add more sequences as neded...
+  # Add more categories (keys)/sequences as neded...
